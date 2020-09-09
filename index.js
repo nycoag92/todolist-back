@@ -1,8 +1,9 @@
 const   express     = require('express'),
         app         = express(),
-        port        = 3000,
+        port        = 8000,
         mongoose    = require('mongoose')
-        bodyParser  = require('body-parser');
+        bodyParser  = require('body-parser')
+        cors        = require('cors');
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
@@ -10,10 +11,11 @@ app.listen(port, () => {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cors())
 
-app.use('/todo', require('./app/todo/route/todoRoute.js'));
+app.use('/todos', require('./app/todo/route/todoRoute.js'));
 
-mongoose.connect('mongodb://localhost/todo-app', {
+mongoose.connect('mongodb://localhost/todoApp', {
     useCreateIndex:true,
     useNewUrlParser: true,
     useUnifiedTopology: true

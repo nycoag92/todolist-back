@@ -4,34 +4,37 @@ const   express = require('express'),
 
 router
     .get('/', (req, res) => {
-        todoService.list(
-            (msg) => {
-                res.status(400).json({message: msg})
-            },
-            (todoList) => {
+        todoService.list().then(
+            todoList => {
                 res.json(todoList);
+            },
+            msg => {
+                res.status(400).json({message: msg})
             }
-        )
+        );
     })
     .post('/', (req, res) => {
-        todoService.create(
-            req.body,
-            (msg) => {
-                res.status(400).json({message: msg})
-            },
-            (todo) => {
+        todoService.create(req.body).then(
+            todo => {
                 res.status(201).json(todo);
-            }
-        )
-    })
-    .update('/:id', (req, res) => {
-        todoService.update(
-            req.body,
-            (msg) => {
-                res.status(400).json({message: msg})
             },
-            (todo) => {
+            msg => {
+                res.status(400).json({message: msg})
+            }
+        );
+    })
+    .put('/:id', (req, res) => {
+        if (!req.params.id) {
+            res.status(400).json({message: 'Id not defined'});
+            return;
+        }
+
+        todoService.update(req.body).then(
+            todo => {
                 res.status(200).json(todo);
+            },
+            msg => {
+                res.status(400).json({message: msg})
             }
         )
     })
@@ -41,16 +44,14 @@ router
             return;
         }
         
-        todoService.delete(
-            req.params.id,
-            (msg) => {
-                res.status(400).json({message: msg})
-            },
+        todoService.delete(req.params.id).then(
             () => {
                 res.status(204).json();
+            },
+            msg => {
+                res.status(400).json({message: msg})
             }
-        );
-
-    })
+        )
+    });
 
 module.exports = router;

@@ -2,7 +2,7 @@ const   mongoose = require('mongoose'),
         Schema   = mongoose.Schema;
 
 const todoSchema = new Schema({
-    tittle: String,
+    title: String,
     description: String,
     expiration: Date,
     completed: Date,
